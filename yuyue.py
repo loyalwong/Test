@@ -38,17 +38,20 @@ def yuyue():
         print("inside try")
         b.click_link_by_text(u'我的专家')
 
-        divs = b.find_by_id('ctl00_ContentPlaceHolder1_divdoctorlist')
-        print(divs)
-        divs2 = b.find_by_css('content_orderlist')
-        print(divs2)
+        element1 = b.find_by_id('ctl00_ContentPlaceHolder1_divdoctorlist')
+        element2 = element1.find_by_css('div.content_doctor') + element1.find_by_css('div.content_doctor_even')
+        for each2 in element2:
+            element3 = each2.find_by_css('div.content_doctor_action')
+            element4 = each2.find_by_css('div.content_doctor_detail')
+            for each4 in element4:
+                element5 = each4.find_by_css('div.content_doctor_detail_top')
+                for each5 in element5:
+                   element6 = each5.find_by_tag('p')
 
     except Exception:
-        print u"出错了...."
+        print("error occur")
 
-#    w = b.windows[0]
-#    print(w.title)
-#    w.close()
+    b.quit()
 
 if __name__ == "__main__":
     yuyue()
