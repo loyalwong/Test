@@ -8,27 +8,29 @@ index_url = "http://yuyue.shdc.org.cn/Main/Default.aspx"
 username = "15921615178"
 password = "87994566"
 #医生
-doctor = u"姓名：王琛"
-hospital = u"医院：曙光西院"
+doctor = u"姓名：瞿小妹"
+hospital = u"医院：眼耳鼻喉科医院"
 
 def login():
-    while b.is_element_present_by_value(u'登 录'):
-        print("in the start of loop of login")
-        sleep(5)
-        try:
+    try:
+        while b.is_element_present_by_value(u'登 录'):
+            print("in the start of loop of login")
+            sleep(5)
             b.fill('txtUserName',username)
             b.fill('txtPassword',password)
             sleep(10)
             b.find_by_value(u'登 录').click()
             print("click login button")
-        except Exception:
-            print("can't find login button")
-        sleep(5)
-        if b.is_element_present_by_value(u'注销退出'):
-            print("already logined")
-            break
+            sleep(5)
+            if b.is_element_present_by_value(u'注销退出'):
+                print("already logined")
+                break
+    except Exception:
+        print("error occur")
 
 def expert_choose():
+    doctor_flag = False
+    hospital_flag = False
     try:
         b.click_link_by_text(u'我的专家')
 
@@ -41,14 +43,14 @@ def expert_choose():
             element6 = element5.find_by_tag('p')
             for each6 in element6:
                 if each6.text == doctor:
-                    doctor_flag = TRUE
+                    doctor_flag = True
                 if each6.text == hospital:
-                    hospital_flag = TRUE
-            if doctor_flag == TRUE and hospital_flag == TRUE:
+                    hospital_flag = True
+            if doctor_flag == True and hospital_flag == True:
                 element7 = element3.find_by_css('div.content_doctor_action_bottom')
                 break
 
-        button_appointment = element7.find_by_id('btnOrder0')
+        button_appointment = element7.find_by_value(u'预约')
         button_appointment.click()
 
     except Exception:
@@ -62,7 +64,7 @@ def yuyue():
 
     expert_choose()
 
-    sleep(10)
+    sleep(30)
     b.quit()
 
 if __name__ == "__main__":
