@@ -39,6 +39,7 @@ for line in file_list:
         for line in episodes_new:
             if string.find(episodes_old, line[0]) == -1:
                     episodes_diff.append(line)
+
     elif episodes_new != [] and episodes_old == []:
         episodes_diff = episodes_new
 
