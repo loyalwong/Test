@@ -1,6 +1,5 @@
 # -*-coding:utf-8-*-
 import urllib2
-from bs4 import BeautifulSoup
 import string
 import csv
 import codecs
@@ -8,7 +7,7 @@ import sys
 import smtplib
 from email.mime.text import MIMEText
 import time
-
+from bs4 import BeautifulSoup
 
 def send_mail(sub, content):
     mailto_list = ['loyalwong@gmail.com']
