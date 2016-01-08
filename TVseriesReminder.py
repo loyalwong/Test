@@ -34,7 +34,7 @@ def TVseries_diff(episodes_arrived):
     reload(sys)
     sys.setdefaultencoding("utf8")
 
-    file_list = csv.reader(file('list.csv', 'rb'))
+    file_list = csv.reader(codecs.open('list.csv', 'rb','utf-8'))
     for file_line in file_list:
         url = file_line[0]
         html = urllib2.urlopen(url)
