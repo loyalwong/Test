@@ -96,5 +96,6 @@ if __name__ == '__main__':
     while 1 > 0:
         episodes_arrived = []
         TVseries_diff(episodes_arrived)
-        sleep(3600)
+        time.sleep(7200)
+        print("runned!")
 
