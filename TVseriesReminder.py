@@ -7,7 +7,7 @@ import codecs
 import sys
 import smtplib
 from email.mime.text import MIMEText
-
+import time
 
 
 def send_mail(sub, content):
@@ -17,7 +17,7 @@ def send_mail(sub, content):
     mail_user = "loyalwong.ifttt@gmail.com"  # 用户名
     mail_pass = "wyzmsjylezewnqjf"  # 口令
     msg = MIMEText(content, _subtype='plain', _charset='utf-8')
-    msg['Subject'] = sub
+    msg['Subject'] = '美剧' + sub + '已更新'
     msg['From'] = u"美剧更新自动提醒"
     msg['To'] = ";".join(mailto_list)
     try:
@@ -73,19 +73,28 @@ def TVseries_diff(episodes_arrived):
             set_old = set(list_old)
             set_diff = set_new.difference(set_old)
             list_diff = list(set_diff)
-            episodes_diff += list_diff
+            for line in episodes_new:
+                matched = []
+                for s in list_diff:
+                    if line[0] == s:
+                        matched = line
+                        break
+                if matched != []:
+                    episodes_diff.append(matched)
         elif episodes_new != [] and episodes_old == []:
-            episodes_diff += episodes_new
+            episodes_diff.append(episodes_new)
 
         if episodes_diff != []:
             writer = csv.writer(codecs.open(title_code + '.csv', 'wb', 'utf-8'))
             writer.writerows(episodes_new)
             episodes_arrived += episodes_diff
             for each in episodes_diff:
-                send_mail('美剧 %s 已更新' % file_line[1],each)
+                send_mail(file_line[1],each[0])
 
 
 if __name__ == '__main__':
-    episodes_arrived = []
-    TVseries_diff(episodes_arrived)
+    while 1 > 0:
+        episodes_arrived = []
+        TVseries_diff(episodes_arrived)
+        sleep(3600)
 
