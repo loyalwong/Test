@@ -8,8 +8,27 @@ index_url = "http://yuyue.shdc.org.cn/Main/Default.aspx"
 username = "15921615178"
 password = "87994566"
 #医生
-doctor = u"姓名：瞿小妹"
-hospital = u"医院：眼耳鼻喉科医院"
+doctor = u"姓名：赵东升"
+hospital = u"医院：新华医院"
+orderdate = u"02月01日 星期一"
+ordertime = u"14:30-15:29"
+
+
+def date_determine(date):
+    if len(date) == 1:
+        return date
+    else:
+        for each in date:
+            if each == orderdate:
+                return each
+
+def time_determine(time):
+    if len(time) == 1:
+        return time
+    else:
+        for each in time:
+            if each == ordertime:
+                return each
 
 def login():
     try:
@@ -56,17 +75,91 @@ def expert_choose():
     except Exception:
         print("error occur")
 
+def date_choose():
+    dict_date = {}
+
+    while dict_date == {}:
+        try:
+            element1 = b.find_by_id('divorder_content')
+            element2 = element1.find_by_css('div.order_date_date')
+            for each2 in element2:
+                element3 = each2.find_by_tag('ul')
+                element4 = element3.find_by_tag('li')
+                for each4 in element4:
+                    element5 = each4.find_by_tag('span')
+                    date = element5.value[element5.value.find(u'月')-2:element5.value.find(u'星期')+3]
+                    element6 = each4.find_by_tag('img')
+                    for each6 in element6:
+                        if each6.outer_html.find('onclick') != -1:
+                            dict_date.setdefault(date,each6)
+        except Exception:
+            print("error occurs")
+        if dict_date != {}:
+            break
+        else:
+            b.reload()
+
+    try:
+        button_order = dict_date.get(date_determine(dict_date.keys()),0)
+        button_order.click()
+    except Exception:
+        print("error occurs")
+
+
+def time_choose():
+    dict_time = {}
+    order_time = ''
+    order_button = []
+    try:
+        element1 = b.find_by_id('divorder_content')
+        element2 = element1.find_by_css('div.order_time_list')
+        element3 = element2.find_by_tag('ul')
+        element4 = element3.find_by_tag('li')
+        for each4 in element4:
+            if each4.outer_html.find('order_time_list_content_time')!= -1:
+                order_time = each4.text
+            if each4.outer_html.find('onclick')!= -1:
+                order_button = each4
+            if order_time <> '' and order_button <> []:
+                dict_time.setdefault(order_time,order_button)
+                order_time = ''
+                order_button = []
+    except Exception:
+        print("error occurs")
+
+    try:
+        button_order = dict_time.get(time_determine(dict_time.keys()),0)
+        button_order.click()
+    except Exception:
+        print("error occurs")
+
+def reservation_confirm():
+    b.fill('txtVerifyCode','')
+    sleep(15)
+    element1 = b.find_by_css('div.doctor_qryy_confirm')
+    button = element1.find_by_tag('img')
+    button.click()
+    element2 = b.find_by_css('div.doctor_yycg_ok')
+    element3 = element2.find_by_tag('img')
+    for each3 in element3:
+        if each3.outer_html.find('AgreeNotice')!= -1:
+            button_confirm = each3
+
+    button_confirm.click()
+
+
 def yuyue():
     global b
     b = Browser(driver_name="chrome")
     b.visit(index_url)
     login()
-
     expert_choose()
+    date_choose()
+    time_choose()
+    reservation_confirm()
 
     sleep(30)
     b.quit()
 
 if __name__ == "__main__":
     yuyue()
-
